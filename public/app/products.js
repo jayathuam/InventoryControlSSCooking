@@ -1,4 +1,4 @@
-app.controller('ProductsCtrl', function ($scope, Product, $modal, ngProgress, toaster) {
+app.controller('ProductsCtrl', function ($scope, Product, $modal,$sce, ngProgress, toaster) {
 
     $scope.product = new Product();
 

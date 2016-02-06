@@ -5,15 +5,19 @@ var mongoose = restful.mongoose;
 
 // Schema
 var productSchema = new mongoose.Schema({
-    itemID: String,
-    name: String,
+    itemID: { type: String, required: true,trim: true },
+    name: { type: String, required: true },
     supName: String,
     country: String,
-    purchasingPrice: Number,
-    sellingPrice: Number,
-    stock: Number,
+    purchasingPrice: { type: String, required: true },
+    sellingPrice: { type: String, required: true },
+    stock: { type: String, required: true },
     description: String,
-    status: Boolean
+    minStock: { type: String, required: true },
+    status: { type: String, required: true },
+    weight: String,
+    insertDate: {type:Date,default: Date.now}
+
 });
 
 // Return model
