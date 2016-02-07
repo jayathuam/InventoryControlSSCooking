@@ -11,113 +11,234 @@
         [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
             display: none !important;
         }
+
+        input.ng-invalid {
+            border-color: #d9534f;
+        }
+
+        input.ng-valid {
+            border-color: #5cb85c;
+        }
+
     </style>
+
 </head>
 <body ng-cloak>
 <div ng-controller="ProductsCtrl">
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <div class="navbar-header navbar-right">
-            <div class="btn-group navbar-btn navbar-right" role="group" style="margin-right: 10px;">
-                <button type="button" class="btn btn-default fa fa-list" tooltip-placement="bottom" tooltip="inactive items"></button>
-                <button type="button" class="btn btn-danger fa fa-exclamation" tooltip-placement="bottom" tooltip="less stock items"></button>
-                <button type="button" class="btn btn-danger fa fa-list" tooltip-placement="bottom" tooltip="out os stock items"></button>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header navbar-right">
+                <div class="btn-group navbar-btn navbar-right" role="group" style="margin-right: 10px;">
+                    <button type="button" class="btn btn-default fa fa-list" tooltip-placement="bottom"
+                            tooltip="inactive items"></button>
+                    <button type="button" class="btn btn-danger fa fa-exclamation" tooltip-placement="bottom"
+                            tooltip="less stock items"></button>
+                    <button type="button" class="btn btn-danger fa fa-list" tooltip-placement="bottom"
+                            tooltip="out os stock items"></button>
+                </div>
+                <button style="margin-right: 10px;" type="button"
+                        class="btn btn-success fa fa-plus navbar-btn navbar-right" ng-click="open()"
+                        tooltip-placement="bottom" tooltip="add items"></button>
+
+                <div class="input-group" style="width: 250px; margin-top: 7px; margin-right: 200px;">
+                    <span class="input-group-addon" id="basic-addon1"><span class="fa fa-search"
+                                                                            aria-hidden="true"></span></span>
+                    <input type="text" class="form-control" placeholder="search" aria-describedby="basic-addon1">
+                </div>
+
+
             </div>
-            <button style="margin-right: 10px;" type="button" class="btn btn-success fa fa-plus navbar-btn navbar-right" ng-click="open()" tooltip-placement="bottom" tooltip="add items"></button>
-
-            <div class="input-group" style="width: 250px; margin-top: 7px; margin-right: 200px;">
-                <span class="input-group-addon" id="basic-addon1"><span class="fa fa-search" aria-hidden="true"></span></span>
-                <input type="text" class="form-control" placeholder="search" aria-describedby="basic-addon1">
-            </div>
-
-
         </div>
-    </div>
-</nav>
-<div class="container">
+    </nav>
+    <div class="container">
 
-    <form name="Codenx" novalidate>
-        <table class="table table-hover" style="margin-top: 10px;">
-            <thead style="color: #FFFFFF; background-color: #000000;">
-            <tr>
-                <th>ItemID</th>
-                <th>Name</th>
-                <th>Supplier Name</th>
-                <th>Country</th>
-                <th>Price</th>
-                <th>Stock</th>
-                <th>Status</th>
-                <th>Action</th>
-            </tr>
-            </thead>
-            <tbody>
-          <tr>
-                <!--<td><input class="form-control" ng-model="product.name" required="" placeholder="Product Name"></td>
-                <td><input class="form-control" ng-model="product.sku" placeholder="Stock Control Unit"></td>
-                <td><input class="form-control" ng-model="product.price" placeholder="Should be a number"></td>-->
-                <!--<td>
-                    <button class="btn btn-primary" ng-click="add(product)" ng-if="!product._id" type="submit"
-                            ng-disabled="!Codenx.$valid">Add Product
-                    </button>
-                    <button class="btn btn-primary" ng-click="open()" type="submit">Add Product
-                    </button>
-                    <div class="btn-group">
-                        <button class="btn btn-info" ng-click="update(product)" ng-if="product._id" type="submit">
-                            Update
+        <form name="Codenx" novalidate>
+            <table class="table table-hover" style="margin-top: 10px;">
+                <thead style="color: #FFFFFF; background-color: #000000;">
+                <tr>
+                    <th>ItemID</th>
+                    <th>Name</th>
+                    <th>Supplier Name</th>
+                    <th>Country</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <!--<td><input class="form-control" ng-model="product.name" required="" placeholder="Product Name"></td>
+                    <td><input class="form-control" ng-model="product.sku" placeholder="Stock Control Unit"></td>
+                    <td><input class="form-control" ng-model="product.price" placeholder="Should be a number"></td>-->
+                    <!--<td>
+                        <button class="btn btn-primary" ng-click="add(product)" ng-if="!product._id" type="submit"
+                                ng-disabled="!Codenx.$valid">Add Product
                         </button>
-                        <button class="btn" ng-click="deselect()" ng-if="product._id">Clear</button>
-                    </div>
-                </td>-->
-            </tr>
-            <tr ng-repeat="product in products">
-                <td>{{product.itemID}}</td>
-                <td>{{product.name}}</td>
-                <td>{{product.supName}}</td>
-                <td>{{product.country}}</td>
-                <td>{{product.purchasingPrice}}</td>
-                <td>{{product.stock}}</td>
-                <td>{{product.status}}</td>
-                <td style="width:130px">
-                    <div class="btn-group" role="group">
-                        <button class="btn btn-info fa fa-info" ng-click="remove(product)" tooltip-placement="bottom" tooltip="item information"></button>
-                        <button class="btn btn-warning fa fa-edit" ng-click="edit(product._id)" tooltip-placement="bottom" tooltip="edit item details"></button>
-                        <button class="btn btn-danger fa fa-trash-o" ng-click="remove(product)" tooltip-placement="bottom" tooltip="delete item"></button>
+                        <button class="btn btn-primary" ng-click="open()" type="submit">Add Product
+                        </button>
+                        <div class="btn-group">
+                            <button class="btn btn-info" ng-click="update(product)" ng-if="product._id" type="submit">
+                                Update
+                            </button>
+                            <button class="btn" ng-click="deselect()" ng-if="product._id">Clear</button>
+                        </div>
+                    </td>-->
+                </tr>
+                <tr ng-repeat="product in products">
+                    <td>{{product.itemID}}</td>
+                    <td>{{product.name}}</td>
+                    <td>{{product.supName}}</td>
+                    <td>{{product.country}}</td>
+                    <td>{{product.purchasingPrice}}</td>
+                    <td>{{product.stock}}</td>
+                    <td>{{product.status}}</td>
+                    <td style="width:130px">
+                        <div class="btn-group" role="group">
+                            <button class="btn btn-info fa fa-info" ng-click="remove(product)"
+                                    tooltip-placement="bottom" tooltip="item information"></button>
+                            <button class="btn btn-warning fa fa-edit" ng-click="edit(product._id)"
+                                    tooltip-placement="bottom" tooltip="edit item details"></button>
+                            <button class="btn btn-danger fa fa-trash-o" ng-click="remove(product)"
+                                    tooltip-placement="bottom" tooltip="delete item"></button>
                         </div>
 
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
 
-</div>
     </div>
+</div>
 
 <div data-loading></div>
 
 <script type="text/ng-template" id="myModalContent.html">
     <div class="modal-header">
-        <h3 class="modal-title">I'm a modal!</h3>
+        <h3 class="modal-title">Add new item</h3>
     </div>
 
     <div class="modal-body">
-        <form name="Codenx" novalidate>
-        <input class="form-control" ng-model="product.itemID" required="required" placeholder="itemID">
-        <input class="form-control" ng-model="product.name" required="required" placeholder="Product Name">
-        <input class="form-control" ng-model="product.supName" required="" placeholder="supName">
-        <input class="form-control" ng-model="product.country" required="" placeholder="country">
-        <input class="form-control" ng-model="product.purchasingPrice" required="required" placeholder="purchasingPrice">
-        <input class="form-control" ng-model="product.sellingPrice" required="required" placeholder="sellingPrice">
-        <input class="form-control" ng-model="product.stock" required="required" placeholder="stock">
-        <input class="form-control" ng-model="product.description" required="" placeholder="description">
-        <input class="form-control" ng-model="product.minStock" required="required" placeholder="minstock">
-        <input class="form-control" ng-model="product.status" required="required" placeholder="status">
-
-            </form>
+        <!--<form name="Codenx" novalidate>-->
+        <table>
+            <tr>
+                <td style="width: 300px;">
+                    <span style="font-weight: bold">Item ID:</span>
+                </td>
+                <td style="width: 300px;">
+                    <input class="form-control" ng-model="product.itemID" required placeholder="itemID">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span style="font-weight: bold">Product Name:</span>
+                </td>
+                <td>
+                    <input class="form-control" ng-model="product.name" required placeholder="Product Name">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span style="font-weight: bold">Supplier Name:</span>
+                </td>
+                <td>
+                    <input class="form-control" ng-model="product.supName" placeholder="supName">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span style="font-weight: bold">Country:</span>
+                </td>
+                <td>
+                    <input class="form-control" ng-model="product.country" placeholder="country">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span style="font-weight: bold">Purchasing Price:</span>
+                </td>
+                <td>
+                    <input class="form-control" ng-model="product.purchasingPrice" required
+                           placeholder="purchasingPrice" type="number">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span style="font-weight: bold">Selling Price:</span>
+                </td>
+                <td>
+                    <input class="form-control" ng-model="product.sellingPrice" required placeholder="sellingPrice"
+                           type="number">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span style="font-weight: bold">Stock:</span>
+                </td>
+                <td>
+                    <input class="form-control" ng-model="product.stock" required placeholder="stock" type="number">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span style="font-weight: bold">Description:</span>
+                </td>
+                <td>
+                    <input class="form-control" ng-model="product.description" placeholder="description">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span style="font-weight: bold">Min Stock:</span>
+                </td>
+                <td>
+                    <input class="form-control" ng-model="product.minStock" required placeholder="minstock"
+                           type="number">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span style="font-weight: bold">Status:</span>
+                </td>
+                <td>
+                    <div class="btn-group">
+                        <label class="btn btn-default" ng-model="product.status" btn-radio="true">True</label>
+                        <label class="btn btn-default" ng-model="product.status" btn-radio="false">False</label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span style="font-weight: bold">Weight:</span>
+                </td>
+                <td>
+                    <input class="form-control" ng-model="product.weight" placeholder="weight">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span style="font-weight: bold">Insert Date:</span>
+                </td>
+                <td>
+                    <p class="input-group">
+                        <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt"
+                               is-open="status.opened" max-date="maxDate"
+                               datepicker-options="dateOptions"  ng-required="true"
+                               close-text="Close"/>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="open($event)"><i class="fa fa-calendar"></i>
+                </button>
+              </span>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <!-- </form>-->
     </div>
     <div class="modal-footer">
-        <button class="btn btn-primary" type="button" ng-click="ok(product)">OK</button>
-        <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+        <button class="btn btn-success" type="button" ng-click="ok(product)">OK</button>
+        <button class="btn btn-danger" type="button" ng-click="cancel()">Cancel</button>
     </div>
 </script>
 
