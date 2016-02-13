@@ -62,6 +62,53 @@ app.controller('ProductsCtrl', function ($scope, Product, $modal,$sce, ngProgres
         });
     };
 
+    //delete model instance
+    $scope.openDeleteModel = function (produ) {
+    var deleteModalInstance = $modal.open({
+        animation: $scope.animationsEnabled,
+        templateUrl: 'DeleteItem.html',
+        controller: 'ModalDeleteCtrl',
+        size: 'sm',
+        resolve: {
+            product: function () {
+                return produ;
+            },
+            parentScope: function(){
+                return $scope;
+            }
+        }
+    });
+
+    deleteModalInstance.result.then(function (selectedItem) {
+        $scope.selected = selectedItem;
+    }, function () {
+        $log.info('Modal dismissed at: ' + new Date());
+    });
+};
+
+    //info model
+    $scope.openInfoModel = function (produ) {
+        var deleteModalInstance = $modal.open({
+            animation: $scope.animationsEnabled,
+            templateUrl: 'itemInformationModel.html',
+            controller: 'ModalItemInfoCtrl',
+            resolve: {
+                product: function () {
+                    return produ;
+                },
+                parentScope: function(){
+                    return $scope;
+                }
+            }
+        });
+
+        deleteModalInstance.result.then(function (selectedItem) {
+            $scope.selected = selectedItem;
+        }, function () {
+            $log.info('Modal dismissed at: ' + new Date());
+        });
+    };
+
     $scope.toggleAnimation = function () {
         $scope.animationsEnabled = !$scope.animationsEnabled;
     };
@@ -79,6 +126,7 @@ app.controller('ModalInstanceCtrl', function ($scope, $modalInstance, products,p
         $scope.product = "";
     };
     $scope.ok = function (product) {
+        product.insertDate = $scope.dt;
         products.save(product, function (product) {
             refresh();
         });
@@ -155,7 +203,33 @@ app.controller('ModalInstanceCtrl', function ($scope, $modalInstance, products,p
                 }
             }
         }
-
         return '';
     };
+});
+
+app.controller('ModalDeleteCtrl', function ($scope, $modalInstance, product,parentScope) {
+
+    $scope.remove = function () {
+        console.log(product);
+        parentScope.remove(product);
+        $modalInstance.close();
+    };
+
+    $scope.cancel = function () {
+        console.log("close");
+        $modalInstance.dismiss('cancel');
+    };
+
+});
+
+app.controller('ModalItemInfoCtrl', function ($scope, $modalInstance, product,parentScope) {
+    var date = new Date(product.insertDate);
+    var dateString = date.getDate() + "-" + date.getMonth() + "-"+ date.getFullYear();
+    product.setDate = dateString;
+    $scope.product = product;
+    $scope.cancel = function () {
+        console.log("close");
+        $modalInstance.dismiss('cancel');
+    };
+
 });
