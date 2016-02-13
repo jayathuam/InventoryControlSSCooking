@@ -70,7 +70,9 @@ app.controller('ProductsCtrl', function ($scope, Product, $modal, $sce, ngProgre
         $scope.products = [];
         Product.query("",function(data,err){
             for(var i=0;i<data.length;i++){
-                if(Number(data[i].stock) < Number(data[i].minStock)){
+                data[i].stock = Number(data[i].stock);
+                data[i].minStock = Number(data[i].minStock);
+                if(data[i].stock < data[i].minStock){
                     $scope.products.push(data[i]);
                 }
             }
