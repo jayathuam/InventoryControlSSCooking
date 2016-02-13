@@ -27,7 +27,7 @@ app.controller('ProductsCtrl', function ($scope, Product, $modal,$sce, ngProgres
     };
 
     $scope.edit = function (id) {
-        $scope.product = Product.get({id: id});
+        return Product.get({id: id});
     };
 
     $scope.deselect = function () {
@@ -113,8 +113,36 @@ app.controller('ProductsCtrl', function ($scope, Product, $modal,$sce, ngProgres
         $scope.animationsEnabled = !$scope.animationsEnabled;
     };
 
-});
 
+//update Model
+
+$scope.openUpdateModel = function (produ) {
+    var deleteModalInstance = $modal.open({
+        animation: $scope.animationsEnabled,
+        templateUrl: 'itemUpdateModel.html',
+        controller: 'ModelItemUpdateControl',
+        resolve: {
+            id: function () {
+                return produ;
+            },
+            parentScope: function(){
+                return $scope;
+            }
+        }
+    });
+
+    deleteModalInstance.result.then(function (selectedItem) {
+        $scope.selected = selectedItem;
+    }, function () {
+        $log.info('Modal dismissed at: ' + new Date());
+    });
+};
+
+$scope.toggleAnimation = function () {
+    $scope.animationsEnabled = !$scope.animationsEnabled;
+};
+
+});
 app.controller('ModalInstanceCtrl', function ($scope, $modalInstance, products,parentScope) {
 
     $scope.products = products;
@@ -230,6 +258,94 @@ app.controller('ModalItemInfoCtrl', function ($scope, $modalInstance, product,pa
     $scope.cancel = function () {
         console.log("close");
         $modalInstance.dismiss('cancel');
+    };
+
+});
+
+app.controller('ModelItemUpdateControl', function ($scope, $modalInstance, id,parentScope) {
+    $scope.product = parentScope.edit(id);
+    /*$scope.product.purchasingPrice = Number($scope.product.purchasingPrice);
+    $scope.product.sellingPrice = Number($scope.product.sellingPrice);
+    $scope.product.stock = Number($scope.product.stock);
+    $scope.product.minStock = Number($scope.product.minStock);*/
+    $scope.cancel = function () {
+        console.log("close");
+        $modalInstance.dismiss('cancel');
+    };
+
+    $scope.ok = function () {
+        $scope.product.insertDate = $scope.dt;
+        parentScope.update($scope.product);
+        /*product.insertDate = $scope.dt;
+        parentScope.update($scope.product);*/
+        $modalInstance.close();
+    };
+//-----------------
+    $scope.today = function() {
+        $scope.dt = new Date();
+    };
+    $scope.today();
+
+    $scope.clear = function () {
+        $scope.dt = null;
+    };
+
+    // Disable weekend selection
+    $scope.disabled = function(date, mode) {
+        return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+    };
+
+    $scope.toggleMin = function() {
+        $scope.minDate = $scope.minDate ? null : new Date();
+    };
+    $scope.toggleMin();
+    $scope.maxDate = new Date(2020, 5, 22);
+
+    $scope.open = function($event) {
+        $scope.status.opened = true;
+    };
+
+    $scope.dateOptions = {
+        formatYear: 'yy',
+        startingDay: 1
+    };
+
+    $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+    $scope.format = $scope.formats[0];
+
+    $scope.status = {
+        opened: false
+    };
+
+    var tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    var afterTomorrow = new Date();
+    afterTomorrow.setDate(tomorrow.getDate() + 2);
+    $scope.events =
+        [
+            {
+                date: tomorrow,
+                status: 'full'
+            },
+            {
+                date: afterTomorrow,
+                status: 'partially'
+            }
+        ];
+
+    $scope.getDayClass = function(date, mode) {
+        if (mode === 'day') {
+            var dayToCheck = new Date(date).setHours(0,0,0,0);
+
+            for (var i=0;i<$scope.events.length;i++){
+                var currentDay = new Date($scope.events[i].date).setHours(0,0,0,0);
+
+                if (dayToCheck === currentDay) {
+                    return $scope.events[i].status;
+                }
+            }
+        }
+        return '';
     };
 
 });

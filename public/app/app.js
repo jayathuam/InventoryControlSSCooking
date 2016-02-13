@@ -41,6 +41,19 @@ app.directive('loading',   ['$http', 'ngProgress', function ($http, ngProgress)
         }
     };
 }]);
+app.directive('stringToNumber', function() {
+    return {
+        require: 'ngModel',
+        link: function(scope, element, attrs, ngModel) {
+            ngModel.$parsers.push(function(value) {
+                return '' + value;
+            });
+            ngModel.$formatters.push(function(value) {
+                return parseFloat(value, 10);
+            });
+        }
+    };
+});
 
 // Create a resource factory to access products table from database 
 app.factory('Product', function($resource) {

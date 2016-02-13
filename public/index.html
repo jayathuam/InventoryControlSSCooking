@@ -90,7 +90,7 @@
                     <td>{{product.name}}</td>
                     <td>{{product.supName}}</td>
                     <td>{{product.country}}</td>
-                    <td>{{product.purchasingPrice}}</td>
+                    <td>{{product.sellingPrice}}</td>
                     <td>{{product.stock}}</td>
                     <td><span class="label label-success" ng-if="product.status == 'true'">Active</span>
                         <span class="label label-default" ng-if="product.status == 'false'">Inactive</span>
@@ -99,7 +99,7 @@
                         <div class="btn-group" role="group">
                             <button class="btn btn-info fa fa-info" ng-click="openInfoModel(product)"
                                     tooltip-placement="bottom" tooltip="item information"></button>
-                            <button class="btn btn-warning fa fa-edit" ng-click="edit(product._id)"
+                            <button class="btn btn-warning fa fa-edit" ng-click="openUpdateModel(product._id)"
                                     tooltip-placement="bottom" tooltip="edit item details"></button>
                             <button class="btn btn-danger fa fa-trash-o" ng-click="openDeleteModel(product)"
                                     tooltip-placement="bottom" tooltip="delete item"></button>
@@ -371,6 +371,135 @@
     </div>
     <div class="modal-footer">
         <button class="btn btn-primary" type="button" ng-click="cancel()">OK</button>
+    </div>
+</script>
+
+<!-- item update model -->
+<script type="text/ng-template" id="itemUpdateModel.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Update Item</h3>
+    </div>
+
+    <div class="modal-body">
+        <!--<form name="Codenx" novalidate>-->
+        <table>
+            <tr>
+                <td style="width: 300px;">
+                    <span style="font-weight: bold;">Item ID:</span>
+                </td>
+                <td style="width: 300px;">
+                    <input class="form-control" ng-model="product.itemID" required placeholder="itemID">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span style="font-weight: bold">Product Name:</span>
+                </td>
+                <td>
+                    <input class="form-control" ng-model="product.name" required placeholder="Product Name">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span style="font-weight: bold">Supplier Name:</span>
+                </td>
+                <td>
+                    <input class="form-control" ng-model="product.supName" placeholder="supName">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span style="font-weight: bold">Country:</span>
+                </td>
+                <td>
+                    <input class="form-control" ng-model="product.country" placeholder="country">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span style="font-weight: bold">Purchasing Price:</span>
+                </td>
+                <td>
+                    <input class="form-control" string-to-number ng-model="product.purchasingPrice" required
+                           placeholder="purchasingPrice" type="number">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span style="font-weight: bold">Selling Price:</span>
+                </td>
+                <td>
+                    <input class="form-control" string-to-number ng-model="product.sellingPrice" required placeholder="sellingPrice"
+                           type="number">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span style="font-weight: bold">Stock:</span>
+                </td>
+                <td>
+                    <input class="form-control" string-to-number ng-model="product.stock" required placeholder="stock" type="number">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span style="font-weight: bold">Description:</span>
+                </td>
+                <td>
+                    <input class="form-control" ng-model="product.description" placeholder="description">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span style="font-weight: bold">Min Stock:</span>
+                </td>
+                <td>
+                    <input class="form-control" string-to-number ng-model="product.minStock" required placeholder="minstock"
+                           type="number">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span style="font-weight: bold">Status:</span>
+                </td>
+                <td>
+                    <div class="btn-group">
+                        <label class="btn btn-success" ng-model="product.status" btn-radio="true">Active</label>
+                        <label class="btn btn-default" ng-model="product.status" btn-radio="false">Inactive</label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span style="font-weight: bold">Weight:</span>
+                </td>
+                <td>
+                    <input class="form-control" ng-model="product.weight" placeholder="weight">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span style="font-weight: bold">Insert Date:</span>
+                </td>
+                <td>
+                    <p class="input-group">
+                        <input type="text" class="form-control" datepicker-popup="{{format}}" ng-model="dt"
+                               is-open="status.opened" max-date="maxDate"
+                               datepicker-options="dateOptions"  ng-required="true"
+                               close-text="Close"/>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="open($event)"><i class="fa fa-calendar"></i>
+                </button>
+              </span>
+                    </p>
+                </td>
+            </tr>
+        </table>
+        <!-- </form>-->
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-success" type="button" ng-click="ok(product)">OK</button>
+        <button class="btn btn-primary" type="button" ng-click="cancel()">Cancel</button>
     </div>
 </script>
 <toaster-container
