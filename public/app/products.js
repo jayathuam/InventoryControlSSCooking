@@ -3,7 +3,14 @@ app.controller('ProductsCtrl', function ($scope, Product, $modal, $sce, ngProgre
     $scope.product = new Product();
 
     var refresh = function () {
-        $scope.products = Product.query();
+        $scope.products = [];
+            Product.query("",function(data,err){
+            for(var i=0;i<data.length;i++){
+                data[i].stock = Number(data[i].stock);
+                data[i].minStock = Number(data[i].minStock);
+                $scope.products.push(data[i]);
+            }
+        });
         $scope.product = "";
     };
     refresh();
@@ -63,7 +70,7 @@ app.controller('ProductsCtrl', function ($scope, Product, $modal, $sce, ngProgre
         $scope.products = [];
         Product.query("",function(data,err){
             for(var i=0;i<data.length;i++){
-                if(data[i].stock < data[i].minStock){
+                if(Number(data[i].stock) < Number(data[i].minStock)){
                     $scope.products.push(data[i]);
                 }
             }

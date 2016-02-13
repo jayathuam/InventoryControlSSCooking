@@ -91,7 +91,7 @@
                         </div>
                     </td>-->
                 </tr>
-                <tr ng-repeat="product in products | filter:searchText" ng-if="product.stock<product.minStock" style="background-color: #ef9a9a;">
+                <tr ng-repeat="product in products | filter:searchText" ng-if="product.stock < product.minStock" style="background-color: #ef9a9a;">
                     <td>{{product.itemID}}</td>
                     <td>{{product.name}}</td>
                     <td>{{product.supName}}</td>
