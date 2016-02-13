@@ -29,21 +29,25 @@
         <div class="container-fluid">
             <div class="navbar-header navbar-right">
                 <div class="btn-group navbar-btn navbar-right" role="group" style="margin-right: 10px;">
-                    <button type="button" class="btn btn-default fa fa-list" tooltip-placement="bottom"
-                            tooltip="inactive items"></button>
-                    <button type="button" class="btn btn-danger fa fa-exclamation" tooltip-placement="bottom"
-                            tooltip="less stock items"></button>
-                    <button type="button" class="btn btn-danger fa fa-list" tooltip-placement="bottom"
-                            tooltip="out os stock items"></button>
+                    <button type="button" class="btn btn-success fa fa-refresh" style="margin-right: 4px;" tooltip-placement="bottom"
+                            tooltip="All items" ng-click="getAll()"></button>
+                    <button type="button" class="btn btn-success fa fa-list" tooltip-placement="bottom" style="margin-right: 4px;"
+                            tooltip="active items" ng-click="getAllActiveItem()"></button>
+                    <button type="button" class="btn btn-default fa fa-list" tooltip-placement="bottom" style="margin-right: 4px;"
+                            tooltip="inactive items" ng-click="getAllInactiveItem()"></button>
+                    <button type="button" class="btn btn-danger fa fa-exclamation" tooltip-placement="bottom" style="margin-right: 4px;"
+                            tooltip="less stock items" ng-click="getMinStock()"></button>
+                    <button type="button" class="btn btn-danger fa fa-list" tooltip-placement="bottom" style="margin-right: 4px;"
+                            tooltip="out of stock items" ng-click="outOfStock()"></button>
                 </div>
                 <button style="margin-right: 10px;" type="button"
                         class="btn btn-success fa fa-plus navbar-btn navbar-right" ng-click="open()"
                         tooltip-placement="bottom" tooltip="add items"></button>
 
-                <div class="input-group" style="width: 250px; margin-top: 7px; margin-right: 200px;">
+                <div class="input-group" style="width: 250px; margin-top: 7px; margin-right: 300px;">
                     <span class="input-group-addon" id="basic-addon1"><span class="fa fa-search"
                                                                             aria-hidden="true"></span></span>
-                    <input type="text" class="form-control" placeholder="search" aria-describedby="basic-addon1">
+                    <input type="text" class="form-control" placeholder="search" aria-describedby="basic-addon1" ng-model="searchText">
                 </div>
 
 
@@ -85,12 +89,34 @@
                         </div>
                     </td>-->
                 </tr>
-                <tr ng-repeat="product in products">
+                <tr ng-repeat="product in products | filter:searchText" ng-if="product.stock<product.minStock" style="background-color: #ef9a9a;">
                     <td>{{product.itemID}}</td>
                     <td>{{product.name}}</td>
                     <td>{{product.supName}}</td>
                     <td>{{product.country}}</td>
-                    <td>{{product.sellingPrice}}</td>
+                    <td>Rs.{{product.sellingPrice}}</td>
+                    <td>{{product.stock}}</td>
+                    <td><span class="label label-success" ng-if="product.status == 'true'">Active</span>
+                        <span class="label label-default" ng-if="product.status == 'false'">Inactive</span>
+                    </td>
+                    <td style="width:130px">
+                        <div class="btn-group" role="group">
+                            <button class="btn btn-info fa fa-info" ng-click="openInfoModel(product)"
+                                    tooltip-placement="bottom" tooltip="item information"></button>
+                            <button class="btn btn-warning fa fa-edit" ng-click="openUpdateModel(product._id)"
+                                    tooltip-placement="bottom" tooltip="edit item details"></button>
+                            <button class="btn btn-danger fa fa-trash-o" ng-click="openDeleteModel(product)"
+                                    tooltip-placement="bottom" tooltip="delete item"></button>
+                        </div>
+
+                    </td>
+                </tr>
+                <tr ng-repeat="product in products | filter:searchText" ng-if="product.stock>=product.minStock">
+                    <td>{{product.itemID}}</td>
+                    <td>{{product.name}}</td>
+                    <td>{{product.supName}}</td>
+                    <td>{{product.country}}</td>
+                    <td>Rs.{{product.sellingPrice}}</td>
                     <td>{{product.stock}}</td>
                     <td><span class="label label-success" ng-if="product.status == 'true'">Active</span>
                         <span class="label label-default" ng-if="product.status == 'false'">Inactive</span>
@@ -187,7 +213,7 @@
                     <span style="font-weight: bold">Description:</span>
                 </td>
                 <td>
-                    <input class="form-control" ng-model="product.description" placeholder="description">
+                    <textarea class="form-control" ng-model="product.description" placeholder="description"></textarea>
                 </td>
             </tr>
             <tr>
@@ -446,7 +472,7 @@
                     <span style="font-weight: bold">Description:</span>
                 </td>
                 <td>
-                    <input class="form-control" ng-model="product.description" placeholder="description">
+                    <textarea class="form-control" ng-model="product.description" placeholder="description"></textarea>
                 </td>
             </tr>
             <tr>

@@ -1,11 +1,11 @@
-app.controller('ProductsCtrl', function ($scope, Product, $modal,$sce, ngProgress, toaster) {
+app.controller('ProductsCtrl', function ($scope, Product, $modal, $sce, ngProgress, toaster) {
 
     $scope.product = new Product();
 
     var refresh = function () {
         $scope.products = Product.query();
         $scope.product = "";
-    }
+    };
     refresh();
 
     $scope.add = function (product) {
@@ -32,14 +32,46 @@ app.controller('ProductsCtrl', function ($scope, Product, $modal,$sce, ngProgres
 
     $scope.deselect = function () {
         $scope.product = "";
-    }
+    };
 
     //$scope.animationsEnabled = true;
 
     $scope.animationsEnabled = true;
 
-    $scope.open = function (size) {
+    //$scope.searchText = false;
 
+    $scope.getAllInactiveItem = function () {
+        $scope.products =Product.query({'status': 'false'});
+        $scope.product = "";
+    };
+
+    $scope.getAllActiveItem = function () {
+        $scope.products =Product.query({'status': 'true'});
+        $scope.product = "";
+    };
+
+    $scope.getAll = function(){
+      refresh();
+    };
+
+    $scope.outOfStock = function(){
+        $scope.products =Product.query({'stock': '0'});
+        $scope.product = "";
+    };
+
+    $scope.getMinStock = function(){
+        $scope.products = [];
+        Product.query("",function(data,err){
+            for(var i=0;i<data.length;i++){
+                if(data[i].stock < data[i].minStock){
+                    $scope.products.push(data[i]);
+                }
+            }
+        });
+        $scope.product = "";
+    };
+
+    $scope.open = function (size) {
         var modalInstance = $modal.open({
             animation: $scope.animationsEnabled,
             templateUrl: 'myModalContent.html',
@@ -49,7 +81,7 @@ app.controller('ProductsCtrl', function ($scope, Product, $modal,$sce, ngProgres
                 products: function () {
                     return Product;
                 },
-                parentScope: function(){
+                parentScope: function () {
                     return $scope;
                 }
             }
@@ -64,27 +96,27 @@ app.controller('ProductsCtrl', function ($scope, Product, $modal,$sce, ngProgres
 
     //delete model instance
     $scope.openDeleteModel = function (produ) {
-    var deleteModalInstance = $modal.open({
-        animation: $scope.animationsEnabled,
-        templateUrl: 'DeleteItem.html',
-        controller: 'ModalDeleteCtrl',
-        size: 'sm',
-        resolve: {
-            product: function () {
-                return produ;
-            },
-            parentScope: function(){
-                return $scope;
+        var deleteModalInstance = $modal.open({
+            animation: $scope.animationsEnabled,
+            templateUrl: 'DeleteItem.html',
+            controller: 'ModalDeleteCtrl',
+            size: 'sm',
+            resolve: {
+                product: function () {
+                    return produ;
+                },
+                parentScope: function () {
+                    return $scope;
+                }
             }
-        }
-    });
+        });
 
-    deleteModalInstance.result.then(function (selectedItem) {
-        $scope.selected = selectedItem;
-    }, function () {
-        $log.info('Modal dismissed at: ' + new Date());
-    });
-};
+        deleteModalInstance.result.then(function (selectedItem) {
+            $scope.selected = selectedItem;
+        }, function () {
+            $log.info('Modal dismissed at: ' + new Date());
+        });
+    };
 
     //info model
     $scope.openInfoModel = function (produ) {
@@ -96,7 +128,7 @@ app.controller('ProductsCtrl', function ($scope, Product, $modal,$sce, ngProgres
                 product: function () {
                     return produ;
                 },
-                parentScope: function(){
+                parentScope: function () {
                     return $scope;
                 }
             }
@@ -116,39 +148,39 @@ app.controller('ProductsCtrl', function ($scope, Product, $modal,$sce, ngProgres
 
 //update Model
 
-$scope.openUpdateModel = function (produ) {
-    var deleteModalInstance = $modal.open({
-        animation: $scope.animationsEnabled,
-        templateUrl: 'itemUpdateModel.html',
-        controller: 'ModelItemUpdateControl',
-        resolve: {
-            id: function () {
-                return produ;
-            },
-            parentScope: function(){
-                return $scope;
+    $scope.openUpdateModel = function (produ) {
+        var deleteModalInstance = $modal.open({
+            animation: $scope.animationsEnabled,
+            templateUrl: 'itemUpdateModel.html',
+            controller: 'ModelItemUpdateControl',
+            resolve: {
+                id: function () {
+                    return produ;
+                },
+                parentScope: function () {
+                    return $scope;
+                }
             }
-        }
-    });
+        });
 
-    deleteModalInstance.result.then(function (selectedItem) {
-        $scope.selected = selectedItem;
-    }, function () {
-        $log.info('Modal dismissed at: ' + new Date());
-    });
-};
+        deleteModalInstance.result.then(function (selectedItem) {
+            $scope.selected = selectedItem;
+        }, function () {
+            $log.info('Modal dismissed at: ' + new Date());
+        });
+    };
 
-$scope.toggleAnimation = function () {
-    $scope.animationsEnabled = !$scope.animationsEnabled;
-};
+    $scope.toggleAnimation = function () {
+        $scope.animationsEnabled = !$scope.animationsEnabled;
+    };
 
 });
-app.controller('ModalInstanceCtrl', function ($scope, $modalInstance, products,parentScope) {
+app.controller('ModalInstanceCtrl', function ($scope, $modalInstance, products, parentScope) {
 
     $scope.products = products;
-   /* $scope.selected = {
-        item: $scope.items[0]
-    };*/
+    /* $scope.selected = {
+     item: $scope.items[0]
+     };*/
     var refresh = function () {
         parentScope.products = products.query();
         $scope.product = "";
@@ -167,7 +199,7 @@ app.controller('ModalInstanceCtrl', function ($scope, $modalInstance, products,p
     };
 
     //------
-    $scope.today = function() {
+    $scope.today = function () {
         $scope.dt = new Date();
     };
     $scope.today();
@@ -177,17 +209,17 @@ app.controller('ModalInstanceCtrl', function ($scope, $modalInstance, products,p
     };
 
     // Disable weekend selection
-    $scope.disabled = function(date, mode) {
+    $scope.disabled = function (date, mode) {
         return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
     };
 
-    $scope.toggleMin = function() {
+    $scope.toggleMin = function () {
         $scope.minDate = $scope.minDate ? null : new Date();
     };
     $scope.toggleMin();
     $scope.maxDate = new Date(2020, 5, 22);
 
-    $scope.open = function($event) {
+    $scope.open = function ($event) {
         $scope.status.opened = true;
     };
 
@@ -219,12 +251,12 @@ app.controller('ModalInstanceCtrl', function ($scope, $modalInstance, products,p
             }
         ];
 
-    $scope.getDayClass = function(date, mode) {
+    $scope.getDayClass = function (date, mode) {
         if (mode === 'day') {
-            var dayToCheck = new Date(date).setHours(0,0,0,0);
+            var dayToCheck = new Date(date).setHours(0, 0, 0, 0);
 
-            for (var i=0;i<$scope.events.length;i++){
-                var currentDay = new Date($scope.events[i].date).setHours(0,0,0,0);
+            for (var i = 0; i < $scope.events.length; i++) {
+                var currentDay = new Date($scope.events[i].date).setHours(0, 0, 0, 0);
 
                 if (dayToCheck === currentDay) {
                     return $scope.events[i].status;
@@ -235,7 +267,7 @@ app.controller('ModalInstanceCtrl', function ($scope, $modalInstance, products,p
     };
 });
 
-app.controller('ModalDeleteCtrl', function ($scope, $modalInstance, product,parentScope) {
+app.controller('ModalDeleteCtrl', function ($scope, $modalInstance, product, parentScope) {
 
     $scope.remove = function () {
         console.log(product);
@@ -250,9 +282,9 @@ app.controller('ModalDeleteCtrl', function ($scope, $modalInstance, product,pare
 
 });
 
-app.controller('ModalItemInfoCtrl', function ($scope, $modalInstance, product,parentScope) {
+app.controller('ModalItemInfoCtrl', function ($scope, $modalInstance, product, parentScope) {
     var date = new Date(product.insertDate);
-    var dateString = date.getDate() + "-" + date.getMonth() + "-"+ date.getFullYear();
+    var dateString = date.getDate() + "-" + date.getMonth() + "-" + date.getFullYear();
     product.setDate = dateString;
     $scope.product = product;
     $scope.cancel = function () {
@@ -262,12 +294,8 @@ app.controller('ModalItemInfoCtrl', function ($scope, $modalInstance, product,pa
 
 });
 
-app.controller('ModelItemUpdateControl', function ($scope, $modalInstance, id,parentScope) {
+app.controller('ModelItemUpdateControl', function ($scope, $modalInstance, id, parentScope) {
     $scope.product = parentScope.edit(id);
-    /*$scope.product.purchasingPrice = Number($scope.product.purchasingPrice);
-    $scope.product.sellingPrice = Number($scope.product.sellingPrice);
-    $scope.product.stock = Number($scope.product.stock);
-    $scope.product.minStock = Number($scope.product.minStock);*/
     $scope.cancel = function () {
         console.log("close");
         $modalInstance.dismiss('cancel');
@@ -277,11 +305,11 @@ app.controller('ModelItemUpdateControl', function ($scope, $modalInstance, id,pa
         $scope.product.insertDate = $scope.dt;
         parentScope.update($scope.product);
         /*product.insertDate = $scope.dt;
-        parentScope.update($scope.product);*/
+         parentScope.update($scope.product);*/
         $modalInstance.close();
     };
 //-----------------
-    $scope.today = function() {
+    $scope.today = function () {
         $scope.dt = new Date();
     };
     $scope.today();
@@ -291,17 +319,17 @@ app.controller('ModelItemUpdateControl', function ($scope, $modalInstance, id,pa
     };
 
     // Disable weekend selection
-    $scope.disabled = function(date, mode) {
+    $scope.disabled = function (date, mode) {
         return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
     };
 
-    $scope.toggleMin = function() {
+    $scope.toggleMin = function () {
         $scope.minDate = $scope.minDate ? null : new Date();
     };
     $scope.toggleMin();
     $scope.maxDate = new Date(2020, 5, 22);
 
-    $scope.open = function($event) {
+    $scope.open = function ($event) {
         $scope.status.opened = true;
     };
 
@@ -333,12 +361,12 @@ app.controller('ModelItemUpdateControl', function ($scope, $modalInstance, id,pa
             }
         ];
 
-    $scope.getDayClass = function(date, mode) {
+    $scope.getDayClass = function (date, mode) {
         if (mode === 'day') {
-            var dayToCheck = new Date(date).setHours(0,0,0,0);
+            var dayToCheck = new Date(date).setHours(0, 0, 0, 0);
 
-            for (var i=0;i<$scope.events.length;i++){
-                var currentDay = new Date($scope.events[i].date).setHours(0,0,0,0);
+            for (var i = 0; i < $scope.events.length; i++) {
+                var currentDay = new Date($scope.events[i].date).setHours(0, 0, 0, 0);
 
                 if (dayToCheck === currentDay) {
                     return $scope.events[i].status;
