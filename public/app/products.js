@@ -71,6 +71,30 @@ app.controller('ProductsCtrl', function ($scope, Product, $modal, $sce, ngProgre
         $scope.product = "";
     };
 
+    $scope.backupDB = function (){
+        var array = [];
+        Product.query("",function(data,err){
+            for(var i=0;i<data.length;i++){
+                var jsonObject = {};
+                jsonObject.itemID = (data[i].itemID == undefined) ? "" : data[i].itemID;
+                jsonObject.name = (data[i].name == undefined) ? "" : data[i].name;
+                jsonObject.stock = (data[i].stock == undefined) ? "" : data[i].stock;
+                jsonObject.country = (data[i].country == undefined) ? "" : data[i].country;
+                jsonObject.minStock = (data[i].minStock == undefined) ? "" : data[i].minStock;
+                jsonObject.weight = (data[i].weight == undefined) ? "" : data[i].weight;
+                jsonObject.supName = (data[i].supName == undefined) ? "" : data[i].supName;
+                jsonObject.purchasingPrice = (data[i].purchasingPrice == undefined) ? "" : data[i].purchasingPrice;
+                jsonObject.sellingPrice = (data[i].sellingPrice == undefined) ? "" : data[i].sellingPrice;
+                jsonObject.status = (data[i].status == undefined) ? "" : data[i].status;
+                jsonObject.description = (data[i].description == undefined) ? "" : data[i].description;
+                jsonObject.insertDate = (data[i].insertDate == undefined) ? "" : data[i].insertDate;
+                array.push(jsonObject);
+            }
+            JSONToCSVConvertor(array, "SSD Inventory", true);
+        });
+
+    };
+
     $scope.open = function (size) {
         var modalInstance = $modal.open({
             animation: $scope.animationsEnabled,

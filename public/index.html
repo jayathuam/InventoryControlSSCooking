@@ -39,12 +39,14 @@
                             tooltip="less stock items" ng-click="getMinStock()"></button>
                     <button type="button" class="btn btn-danger fa fa-list" tooltip-placement="bottom" style="margin-right: 4px;"
                             tooltip="out of stock items" ng-click="outOfStock()"></button>
+                    <button type="button" class="btn btn-success fa fa-download" tooltip-placement="bottom" style="margin-right: 4px;"
+                            tooltip="download backup" ng-click="backupDB()"></button>
                 </div>
                 <button style="margin-right: 10px;" type="button"
                         class="btn btn-success fa fa-plus navbar-btn navbar-right" ng-click="open()"
                         tooltip-placement="bottom" tooltip="add items"></button>
 
-                <div class="input-group" style="width: 250px; margin-top: 7px; margin-right: 300px;">
+                <div class="input-group" style="width: 250px; margin-top: 7px; margin-right: 350px;">
                     <span class="input-group-addon" id="basic-addon1"><span class="fa fa-search"
                                                                             aria-hidden="true"></span></span>
                     <input type="text" class="form-control" placeholder="search" aria-describedby="basic-addon1" ng-model="searchText">
@@ -539,5 +541,6 @@
 <script src="js/ui-bootstrap-tpls-0.13.4.min.js"></script>
 <script src="app/app.js"></script>
 <script src="app/products.js"></script>
+<script src="app/jsontoCSV.js"></script>
 </body>
 </html>
