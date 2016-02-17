@@ -4,8 +4,8 @@ app.controller('ProductsCtrl', function ($scope, Product, $modal, $sce, ngProgre
 
     var refresh = function () {
         $scope.products = [];
-            Product.query("",function(data,err){
-            for(var i=0;i<data.length;i++){
+        Product.query("", function (data, err) {
+            for (var i = 0; i < data.length; i++) {
                 data[i].stock = Number(data[i].stock);
                 data[i].minStock = Number(data[i].minStock);
                 $scope.products.push(data[i]);
@@ -41,6 +41,27 @@ app.controller('ProductsCtrl', function ($scope, Product, $modal, $sce, ngProgre
         $scope.product = "";
     };
 
+    $scope.addAll = function (array) {
+        for (var i = 0; i < array.length; i++) {
+            console.log(array[i]);
+            Product.save(array[i], function (product) {
+                //refresh();
+            });
+        }
+
+    };
+
+    $scope.deleteALL = function(){
+        Product.query("", function (data, err) {
+            for (var i = 0; i < data.length; i++) {
+                data[i].$delete(function () {
+                    refresh();
+                });
+
+            }
+        });
+    };
+
     //$scope.animationsEnabled = true;
 
     $scope.animationsEnabled = true;
@@ -48,31 +69,31 @@ app.controller('ProductsCtrl', function ($scope, Product, $modal, $sce, ngProgre
     //$scope.searchText = false;
 
     $scope.getAllInactiveItem = function () {
-        $scope.products =Product.query({'status': 'false'});
+        $scope.products = Product.query({'status': 'false'});
         $scope.product = "";
     };
 
     $scope.getAllActiveItem = function () {
-        $scope.products =Product.query({'status': 'true'});
+        $scope.products = Product.query({'status': 'true'});
         $scope.product = "";
     };
 
-    $scope.getAll = function(){
-      refresh();
+    $scope.getAll = function () {
+        refresh();
     };
 
-    $scope.outOfStock = function(){
-        $scope.products =Product.query({'stock': '0'});
+    $scope.outOfStock = function () {
+        $scope.products = Product.query({'stock': '0'});
         $scope.product = "";
     };
 
-    $scope.getMinStock = function(){
+    $scope.getMinStock = function () {
         $scope.products = [];
-        Product.query("",function(data,err){
-            for(var i=0;i<data.length;i++){
+        Product.query("", function (data, err) {
+            for (var i = 0; i < data.length; i++) {
                 data[i].stock = Number(data[i].stock);
                 data[i].minStock = Number(data[i].minStock);
-                if(data[i].stock < data[i].minStock){
+                if (data[i].stock < data[i].minStock) {
                     $scope.products.push(data[i]);
                 }
             }
@@ -80,10 +101,10 @@ app.controller('ProductsCtrl', function ($scope, Product, $modal, $sce, ngProgre
         $scope.product = "";
     };
 
-    $scope.backupDB = function (){
+    $scope.backupDB = function () {
         var array = [];
-        Product.query("",function(data,err){
-            for(var i=0;i<data.length;i++){
+        Product.query("", function (data, err) {
+            for (var i = 0; i < data.length; i++) {
                 var jsonObject = {};
                 jsonObject.itemID = (data[i].itemID == undefined) ? "" : data[i].itemID;
                 jsonObject.name = (data[i].name == undefined) ? "" : data[i].name;
@@ -151,6 +172,27 @@ app.controller('ProductsCtrl', function ($scope, Product, $modal, $sce, ngProgre
         });
     };
 
+    //restore model instance
+    $scope.openRestoreModel = function () {
+        var RestoreModalInstance = $modal.open({
+            animation: $scope.animationsEnabled,
+            templateUrl: 'BackupDatabaseModel.html',
+            controller: 'ModalRestoreCtrl',
+            size: 'sm',
+            resolve: {
+                parentScope: function () {
+                    return $scope;
+                }
+            }
+        });
+
+        RestoreModalInstance.result.then(function (selectedItem) {
+            $scope.selected = selectedItem;
+        }, function () {
+            //$log.info('Modal dismissed at: ' + new Date());
+        });
+    };
+
     //info model
     $scope.openInfoModel = function (produ) {
         var deleteModalInstance = $modal.open({
@@ -170,14 +212,13 @@ app.controller('ProductsCtrl', function ($scope, Product, $modal, $sce, ngProgre
         deleteModalInstance.result.then(function (selectedItem) {
             $scope.selected = selectedItem;
         }, function () {
-            $log.info('Modal dismissed at: ' + new Date());
+            //$log.info('Modal dismissed at: ' + new Date());
         });
     };
 
     $scope.toggleAnimation = function () {
         $scope.animationsEnabled = !$scope.animationsEnabled;
     };
-
 
 //update Model
 
@@ -320,6 +361,54 @@ app.controller('ModalItemInfoCtrl', function ($scope, $modalInstance, product, p
     var dateString = date.getDate() + "-" + date.getMonth() + "-" + date.getFullYear();
     product.setDate = dateString;
     $scope.product = product;
+    $scope.cancel = function () {
+        console.log("close");
+        $modalInstance.dismiss('cancel');
+    };
+
+});
+
+app.controller('ModalRestoreCtrl', function ($scope, $modalInstance, parentScope) {
+
+    $scope.productArray = [];
+    $scope.messages = "";
+    $scope.$watch('myFile', function (newVal) {
+        if (newVal) {
+            console.log(newVal);
+            var r = new FileReader();
+            r.onload = function (e) {
+                var contents = e.target.result;
+                console.log(contents);
+                $scope.productArray = CSV2JSON(contents);
+                console.log($scope.productArray);
+            };
+            r.readAsText(newVal);
+        }
+
+    });
+
+    $scope.restoreDB = function () {
+        if ($scope.productArray.length != 0 && $scope.pass === "xxx") {
+            $scope.messages = "";
+            parentScope.addAll($scope.productArray);
+            $modalInstance.close();
+        }
+        else{
+            $scope.messages = "Error in database restore.";
+        }
+    };
+
+    $scope.deleteAll = function(){
+        if($scope.pass === "xxx") {
+            $scope.messages = "";
+            parentScope.deleteALL();
+            $modalInstance.close();
+        }
+        else{
+            $scope.messages = "wrong passphrase";
+        }
+    };
+
     $scope.cancel = function () {
         console.log("close");
         $modalInstance.dismiss('cancel');

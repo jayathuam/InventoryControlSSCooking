@@ -55,6 +55,22 @@ app.directive('stringToNumber', function() {
     };
 });
 
+app.directive('fileModel', ['$parse', function ($parse) {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            var model = $parse(attrs.fileModel);
+            var modelSetter = model.assign;
+
+            element.bind('change', function(){
+                scope.$apply(function(){
+                    modelSetter(scope, element[0].files[0]);
+                });
+            });
+        }
+    };
+}]);
+
 // Create a resource factory to access products table from database 
 app.factory('Product', function($resource) {
   return $resource('/api/products/:id', { id: '@_id' }, {

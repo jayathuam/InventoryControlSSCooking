@@ -8,7 +8,7 @@ function JSONToCSVConvertor(JSONData, ReportTitle, ShowLabel) {
     var CSV = '';
     //Set Report title in first row or line
 
-    CSV += ReportTitle + '\r\n\n';
+    //CSV += ReportTitle + '\r\n\n';
 
     //This condition will generate the Label/Header
     if (ShowLabel) {

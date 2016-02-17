@@ -41,12 +41,14 @@
                             tooltip="out of stock items" ng-click="outOfStock()"></button>
                     <button type="button" class="btn btn-success fa fa-download" tooltip-placement="bottom" style="margin-right: 4px;"
                             tooltip="download backup" ng-click="backupDB()"></button>
+                    <button type="button" class="btn btn-success fa fa-upload" tooltip-placement="bottom" style="margin-right: 4px;"
+                            tooltip="Restore Database" ng-click="openRestoreModel()"></button>
                 </div>
                 <button style="margin-right: 10px;" type="button"
                         class="btn btn-success fa fa-plus navbar-btn navbar-right" ng-click="open()"
                         tooltip-placement="bottom" tooltip="add items"></button>
 
-                <div class="input-group" style="width: 250px; margin-top: 7px; margin-right: 350px;">
+                <div class="input-group" style="width: 250px; margin-top: 7px; margin-right: 380px;">
                     <span class="input-group-addon" id="basic-addon1"><span class="fa fa-search"
                                                                             aria-hidden="true"></span></span>
                     <input type="text" class="form-control" placeholder="search" aria-describedby="basic-addon1" ng-model="searchText">
@@ -530,6 +532,26 @@
         <button class="btn btn-primary" type="button" ng-click="cancel()">Cancel</button>
     </div>
 </script>
+
+<!-- backup database model -->
+
+<script type="text/ng-template" id="BackupDatabaseModel.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Restore DataBase</h3>
+    </div>
+
+    <div class="modal-body">
+        <span style="font-weight: bold">Are you sure you want to restore the database with selected .CSV file?</span>
+        <input type="file" file-model="myFile"/>
+        <input style="margin-top: 5px;" type="text" placeholder="passphrase" ng-model="pass" /><br>
+        <span style="margin-top: 5px; color: red">{{messages}}</span>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-danger" type="button" ng-click="deleteAll()">Delete All</button>
+        <button class="btn btn-danger" type="button" ng-click="restoreDB()">Restore</button>
+        <button class="btn btn-primary" type="button" ng-click="cancel()">Cancel</button>
+    </div>
+</script>
 <toaster-container
         toaster-options="{'time-out': 3000, 'close-button':true, 'animation-class': 'toast-top-center'}"></toaster-container>
 
@@ -542,5 +564,6 @@
 <script src="app/app.js"></script>
 <script src="app/products.js"></script>
 <script src="app/jsontoCSV.js"></script>
+<script src="app/CSVtoJSON.js"></script>
 </body>
 </html>
