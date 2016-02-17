@@ -376,6 +376,11 @@ app.controller('ModalRestoreCtrl', function ($scope, $modalInstance, parentScope
         if (newVal) {
             console.log(newVal);
             var r = new FileReader();
+            var type = newVal.name.split(".")[1];
+            if(type !== "csv"){
+                $scope.messages = "file type does not match.";
+                return;
+            }
             r.onload = function (e) {
                 var contents = e.target.result;
                 console.log(contents);
