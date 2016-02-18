@@ -68,6 +68,7 @@
                     <th>Name</th>
                     <th>Supplier Name</th>
                     <th>Country</th>
+                    <th>Category</th>
                     <th>Price</th>
                     <th>Stock</th>
                     <th>Status</th>
@@ -98,6 +99,7 @@
                     <td>{{product.name}}</td>
                     <td>{{product.supName}}</td>
                     <td>{{product.country}}</td>
+                    <td>{{product.category}}</td>
                     <td>Rs.{{product.sellingPrice}}</td>
                     <td>{{product.stock}}</td>
                     <td><span class="label label-success" ng-if="product.status == 'true'">Active</span>
@@ -120,6 +122,7 @@
                     <td>{{product.name}}</td>
                     <td>{{product.supName}}</td>
                     <td>{{product.country}}</td>
+                    <td>{{product.category}}</td>
                     <td>Rs.{{product.sellingPrice}}</td>
                     <td>{{product.stock}}</td>
                     <td><span class="label label-success" ng-if="product.status == 'true'">Active</span>
@@ -159,7 +162,7 @@
                     <span style="font-weight: bold;">Item ID:</span>
                 </td>
                 <td style="width: 300px;">
-                    <input class="form-control" ng-model="product.itemID" required placeholder="itemID">
+                    <input class="form-control custominput" ng-model="product.itemID" required placeholder="itemID">
                 </td>
             </tr>
             <tr>
@@ -167,7 +170,7 @@
                     <span style="font-weight: bold">Product Name:</span>
                 </td>
                 <td>
-                    <input class="form-control" ng-model="product.name" required placeholder="Product Name">
+                    <input class="form-control custominput" ng-model="product.name" required placeholder="Product Name">
                 </td>
             </tr>
             <tr>
@@ -175,7 +178,7 @@
                     <span style="font-weight: bold">Supplier Name:</span>
                 </td>
                 <td>
-                    <input class="form-control" ng-model="product.supName" placeholder="supName">
+                    <input class="form-control custominput" ng-model="product.supName" placeholder="supName">
                 </td>
             </tr>
             <tr>
@@ -183,24 +186,32 @@
                     <span style="font-weight: bold">Country:</span>
                 </td>
                 <td>
-                    <input class="form-control" ng-model="product.country" placeholder="country">
+                    <input class="form-control custominput" ng-model="product.country" placeholder="country">
                 </td>
             </tr>
             <tr>
                 <td>
-                    <span style="font-weight: bold">Purchasing Price:</span>
+                    <span style="font-weight: bold">Category:</span>
                 </td>
                 <td>
-                    <input class="form-control" ng-model="product.purchasingPrice" required
+                    <input class="form-control custominput" ng-model="product.category" placeholder="category" required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span style="font-weight: bold">Purchasing Price Rs:</span>
+                </td>
+                <td>
+                    <input class="form-control custominput" ng-model="product.purchasingPrice" required
                            placeholder="purchasingPrice" type="number">
                 </td>
             </tr>
             <tr>
                 <td>
-                    <span style="font-weight: bold">Selling Price:</span>
+                    <span style="font-weight: bold">Selling Price Rs:</span>
                 </td>
                 <td>
-                    <input class="form-control" ng-model="product.sellingPrice" required placeholder="sellingPrice"
+                    <input class="form-control custominput" ng-model="product.sellingPrice" required placeholder="sellingPrice"
                            type="number">
                 </td>
             </tr>
@@ -209,7 +220,7 @@
                     <span style="font-weight: bold">Stock:</span>
                 </td>
                 <td>
-                    <input class="form-control" ng-model="product.stock" required placeholder="stock" type="number">
+                    <input class="form-control custominput" ng-model="product.stock" required placeholder="stock" type="number">
                 </td>
             </tr>
             <tr>
@@ -217,7 +228,7 @@
                     <span style="font-weight: bold">Description:</span>
                 </td>
                 <td>
-                    <textarea class="form-control" ng-model="product.description" placeholder="description"></textarea>
+                    <textarea class="form-control custominput" ng-model="product.description" placeholder="description"></textarea>
                 </td>
             </tr>
             <tr>
@@ -225,7 +236,7 @@
                     <span style="font-weight: bold">Min Stock:</span>
                 </td>
                 <td>
-                    <input class="form-control" ng-model="product.minStock" required placeholder="minstock"
+                    <input class="form-control custominput" ng-model="product.minStock" required placeholder="minstock"
                            type="number">
                 </td>
             </tr>
@@ -234,7 +245,7 @@
                     <span style="font-weight: bold">Status:</span>
                 </td>
                 <td>
-                    <div class="btn-group">
+                    <div class="btn-group custominput">
                         <label class="btn btn-success" ng-model="product.status" btn-radio="true">Active</label>
                         <label class="btn btn-default" ng-model="product.status" btn-radio="false">Inactive</label>
                     </div>
@@ -245,7 +256,7 @@
                     <span style="font-weight: bold">Weight:</span>
                 </td>
                 <td>
-                    <input class="form-control" ng-model="product.weight" placeholder="weight">
+                    <input class="form-control custominput" ng-model="product.weight" placeholder="weight">
                 </td>
             </tr>
             <tr>
@@ -333,10 +344,18 @@
             </tr>
             <tr>
                 <td class="tdStyle">
+                    <span class="titlestyle">Category:</span>
+                </td>
+                <td>
+                    <span style="font-weight: bold">{{product.category}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="tdStyle">
                     <span class="titlestyle">Purchasing Price:</span>
                 </td>
                 <td>
-                    <span style="font-weight: bold">{{product.purchasingPrice}}</span>
+                    <span style="font-weight: bold">Rs.{{product.purchasingPrice}}</span>
                 </td>
             </tr>
             <tr>
@@ -344,7 +363,7 @@
                     <span class="titlestyle">Selling Price:</span>
                 </td>
                 <td>
-                    <span style="font-weight: bold">{{product.sellingPrice}}</span>
+                    <span style="font-weight: bold">Rs.{{product.sellingPrice}}</span>
                 </td>
             </tr>
             <tr>
@@ -418,7 +437,7 @@
                     <span style="font-weight: bold;">Item ID:</span>
                 </td>
                 <td style="width: 300px;">
-                    <input class="form-control" ng-model="product.itemID" required placeholder="itemID">
+                    <input class="form-control custominput" ng-model="product.itemID" required placeholder="itemID">
                 </td>
             </tr>
             <tr>
@@ -426,7 +445,7 @@
                     <span style="font-weight: bold">Product Name:</span>
                 </td>
                 <td>
-                    <input class="form-control" ng-model="product.name" required placeholder="Product Name">
+                    <input class="form-control custominput" ng-model="product.name" required placeholder="Product Name">
                 </td>
             </tr>
             <tr>
@@ -434,7 +453,7 @@
                     <span style="font-weight: bold">Supplier Name:</span>
                 </td>
                 <td>
-                    <input class="form-control" ng-model="product.supName" placeholder="supName">
+                    <input class="form-control custominput" ng-model="product.supName" placeholder="supName">
                 </td>
             </tr>
             <tr>
@@ -442,24 +461,32 @@
                     <span style="font-weight: bold">Country:</span>
                 </td>
                 <td>
-                    <input class="form-control" ng-model="product.country" placeholder="country">
+                    <input class="form-control custominput" ng-model="product.country" placeholder="country">
                 </td>
             </tr>
             <tr>
                 <td>
-                    <span style="font-weight: bold">Purchasing Price:</span>
+                    <span style="font-weight: bold">Category:</span>
                 </td>
                 <td>
-                    <input class="form-control" string-to-number ng-model="product.purchasingPrice" required
+                    <input class="form-control custominput" ng-model="product.category" placeholder="category" required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span style="font-weight: bold">Purchasing Price Rs:</span>
+                </td>
+                <td>
+                    <input class="form-control custominput" string-to-number ng-model="product.purchasingPrice" required
                            placeholder="purchasingPrice" type="number">
                 </td>
             </tr>
             <tr>
                 <td>
-                    <span style="font-weight: bold">Selling Price:</span>
+                    <span style="font-weight: bold">Selling Price Rs:</span>
                 </td>
                 <td>
-                    <input class="form-control" string-to-number ng-model="product.sellingPrice" required placeholder="sellingPrice"
+                    <input class="form-control custominput" string-to-number ng-model="product.sellingPrice" required placeholder="sellingPrice"
                            type="number">
                 </td>
             </tr>
@@ -468,7 +495,7 @@
                     <span style="font-weight: bold">Stock:</span>
                 </td>
                 <td>
-                    <input class="form-control" string-to-number ng-model="product.stock" required placeholder="stock" type="number">
+                    <input class="form-control custominput" string-to-number ng-model="product.stock" required placeholder="stock" type="number">
                 </td>
             </tr>
             <tr>
@@ -476,7 +503,7 @@
                     <span style="font-weight: bold">Description:</span>
                 </td>
                 <td>
-                    <textarea class="form-control" ng-model="product.description" placeholder="description"></textarea>
+                    <textarea class="form-control custominput" ng-model="product.description" placeholder="description"></textarea>
                 </td>
             </tr>
             <tr>
@@ -484,7 +511,7 @@
                     <span style="font-weight: bold">Min Stock:</span>
                 </td>
                 <td>
-                    <input class="form-control" string-to-number ng-model="product.minStock" required placeholder="minstock"
+                    <input class="form-control custominput" string-to-number ng-model="product.minStock" required placeholder="minstock"
                            type="number">
                 </td>
             </tr>
@@ -493,7 +520,7 @@
                     <span style="font-weight: bold">Status:</span>
                 </td>
                 <td>
-                    <div class="btn-group">
+                    <div class="btn-group custominput">
                         <label class="btn btn-success" ng-model="product.status" btn-radio="true">Active</label>
                         <label class="btn btn-default" ng-model="product.status" btn-radio="false">Inactive</label>
                     </div>
@@ -504,7 +531,7 @@
                     <span style="font-weight: bold">Weight:</span>
                 </td>
                 <td>
-                    <input class="form-control" ng-model="product.weight" placeholder="weight">
+                    <input class="form-control custominput" ng-model="product.weight" placeholder="weight">
                 </td>
             </tr>
             <tr>

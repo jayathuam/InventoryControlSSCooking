@@ -110,6 +110,7 @@ app.controller('ProductsCtrl', function ($scope, Product, $modal, $sce, ngProgre
                 jsonObject.name = (data[i].name == undefined) ? "" : data[i].name;
                 jsonObject.stock = (data[i].stock == undefined) ? "" : data[i].stock;
                 jsonObject.country = (data[i].country == undefined) ? "" : data[i].country;
+                jsonObject.category = (data[i].category == undefined) ? "" : data[i].category;
                 jsonObject.minStock = (data[i].minStock == undefined) ? "" : data[i].minStock;
                 jsonObject.weight = (data[i].weight == undefined) ? "" : data[i].weight;
                 jsonObject.supName = (data[i].supName == undefined) ? "" : data[i].supName;

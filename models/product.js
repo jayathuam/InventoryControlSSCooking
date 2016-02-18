@@ -9,6 +9,7 @@ var productSchema = new mongoose.Schema({
     name: { type: String, required: true },
     supName: String,
     country: String,
+    category: { type: String, required: true },
     purchasingPrice: { type: String, required: true },
     sellingPrice: { type: String, required: true },
     stock: { type: String, required: true },
